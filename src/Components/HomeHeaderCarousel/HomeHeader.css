@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+.img-blur-style-2 {
+    background-image: 
+        linear-gradient(90deg, rgb(30 41 59 / var(--tw-bg-opacity)), transparent, transparent);
+    height: 100%;
+    width: 100%;
+    background-size: cover; /* Set as needed */
+    background-position: center; /* Set as needed */
+}
+.img-blur-style-1 {
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.948),transparent,transparent);
+    height: 100%;
+    width: 100%;
+}
+
+.header-overview {
+    font-family: 'Rubik', sans-serif;
+
+}

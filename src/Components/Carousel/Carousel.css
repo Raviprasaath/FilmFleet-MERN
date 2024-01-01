@@ -1,0 +1,42 @@
+
+.swiper-button-prev:after, .swiper-button-next:after {
+    color: rgb(14, 247, 235) !important;
+    transition: 0.2s;
+    font-size: 20px !important;
+}
+
+.swiper-button-prev:hover, .swiper-button-next:hover {
+    transition: 0.5s;
+    background-color: azure;
+}
+
+.swiper-button-prev, .swiper-button-next {
+    margin-top: -40px !important;
+}
+
+/* Add styles for hiding and showing details */
+.detail-hidden {
+    display: none;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Hover effect */
+  .relatives:hover .detail-hidden {
+    display: block;
+    position: absolute;
+    font-size: 12px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-left: 5px;
+    bottom: 45px;
+    background-color: rgba(128, 128, 128, 0.9);
+    color: black;
+    height: 110px;
+    overflow: hidden;
+    pointer-events: auto;
+  }
+
+  .movie-title {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+  }
