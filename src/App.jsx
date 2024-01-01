@@ -64,24 +64,3 @@ function App() {
 export default App
 
 
-/*
-
-Redux toolkit
-thunk middleware
-Error boundary
-Breadcrumb
-Route 6.4
-Suspense
-Lazy Loader
-Pagination
-memo
-Material UI
-Swiper
-
-Node
-Express
-Mongo DB
-Mongoose
-JWT
-
-*/
