@@ -115,6 +115,7 @@ export const getSingleMovie = createAsyncThunk(
             const response = await fetch(url, option);
             if (response.ok) {
                 const result = await response.json();
+                localStorage.setItem('singleMovieResult',JSON.stringify(result));
                 return result;
             } else {
                 return rejectWithValue({error: 'Movie Fetching Fails'})

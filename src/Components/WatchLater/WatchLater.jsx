@@ -17,6 +17,7 @@ const WatchLater = () => {
 
     const handlerDispatch = (idVal) => {
         dispatch(getSingleMovie({id: idVal}));
+        localStorage.setItem('movieIdBackup', JSON.stringify(idVal));
     }
 
     useEffect(()=> {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import { getTrailerOut, gettingRelatedMovie, gettingWatchList } from '../../slice/slice';
+import { getSingleMovie, getTrailerOut, gettingRelatedMovie, gettingWatchList } from '../../slice/slice';
 import { FidgetSpinner } from 'react-loader-spinner'
 import LazyLoader from '../LazyLoader/LazyLoader';
 import { IoMdCloseCircle } from "react-icons/io";
@@ -18,7 +18,10 @@ const MovieDetailPage = () => {
   const [tokenValue, setTokenValue] = useState('');
   const [snakeBar, setSnakeBar] = useState(false);
   const [watchListStatus, setWatchListStatus] = useState(false);
+  const [backupData, setBackupData] = useState([]);
   const dispatch = useDispatch();
+
+  let movieValue = JSON.parse(localStorage.getItem('singleMovieResult'));
 
   const localStore = JSON.parse(localStorage.getItem('watchList')) || [];
   const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];
@@ -116,9 +119,10 @@ const MovieDetailPage = () => {
 
   useEffect(()=> {
     dispatch(gettingRelatedMovie({
-      value: singleMovieFetch?.genres[0].id,
+      value: movieValue?.genres[0]?.id,
       page: 1,  
     }))
+
     if (userLocalCheck.email) {
       let time = setTimeout(()=> {
         let idCheck = false;
@@ -132,6 +136,13 @@ const MovieDetailPage = () => {
     }
 
   }, [singleMovieFetch])
+
+
+  useEffect(()=> {
+    let idValue = JSON.parse(localStorage.getItem('movieIdBackup'));
+    dispatch(getSingleMovie({ id: idValue }));
+    setBackupData(movieValue);
+  }, [])
 
 
   return (
@@ -166,7 +177,7 @@ const MovieDetailPage = () => {
 
                   <div className="mt-4 flex items-center">
                     <span className="bg-yellow-500 text-gray-900 px-2 py-1 rounded">
-                      {singleMovieFetch?.vote_average.toFixed(1)} / 10
+                      {singleMovieFetch?.vote_average?.toFixed(1)} / 10
                     </span>
                     <span className="ml-2">{singleMovieFetch?.vote_count} votes</span>
                   </div>

@@ -18,6 +18,7 @@ const SearchPage = () => {
 
     const handlerDispatch = (idVal) => {
         dispatch(getSingleMovie({ id: idVal }));
+        localStorage.setItem('movieIdBackup', JSON.stringify(idVal));
     };
 
     const handlerPageControl = (value) => {

@@ -11,6 +11,12 @@ import dummyImg from "../../assets/horizontal-dummy.jpg"
 
 const Carousel = (props) => {
   const dispatch = useDispatch();
+
+  const handlerDispatch = (idVal) => {
+    dispatch(getSingleMovie({ id: idVal }));
+    localStorage.setItem('movieIdBackup', JSON.stringify(idVal));
+  };
+
   return (
     <>
       <Swiper
@@ -40,7 +46,7 @@ const Carousel = (props) => {
       >
         {props.props?.results?.slice((Math.floor(Math.random() * 10) + 1), (Math.floor(Math.random() * 10) + 20))?.map((item) => (
           <SwiperSlide key={item.id} className="w-[90%]">
-            <Link onClick={() => dispatch(getSingleMovie({ id: item.id }))} to={`/movie/${item.title}`}>
+            <Link onClick={()=>handlerDispatch(item.id)} to={`/movie/${item.title}`}>
               <div className="my-2 movie-title relatives relative cursor-pointer h-[200px] flex flex-col py-4 hover:scale-[1.07]">
                 {item.backdrop_path ? 
                 <img className='rounded-md' src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`} alt="img" />
