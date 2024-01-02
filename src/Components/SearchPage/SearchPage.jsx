@@ -36,10 +36,10 @@ const SearchPage = () => {
     useEffect(()=> {
         setDataLoad(searchResult);
     }, [searchResult, location.pathname])
-
+    console.log(searchResult.results);
     return (
         <>
-            {dataLoad.length !== 0 ? 
+            {searchResult.results.length !== 0 ?
                 (<div className={`flex flex-col justify-center items-center ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>
                     <div id='check'className={`flex flex-row justify-center flex-wrap gap-4 px-2 py-4 `}  >
                         { dataLoad?.results?.map((item)=> (
