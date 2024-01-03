@@ -43,7 +43,6 @@ const SignUpPage = () => {
     });
 
     if (!isAnyFieldMissing) {
-
       const result = dispatch(getSignup({
         username: user.username,
         email: user.email,
@@ -52,15 +51,13 @@ const SignUpPage = () => {
       }));
 
       result.then(result => {
-        if (result.payload._id) {
+        if (result.payload._id || result.payload.accessToken) {
           setStatus(true);
           navigateLogin();
         } else {
-          setErrorMessage(result);
+          setErrorMessage(result.payload.error);
         }
     });
-
-      localStorage.setItem('userDetails', JSON.stringify(user));
     }
   };
 
@@ -135,7 +132,7 @@ const SignUpPage = () => {
               <p className="text-red-500 text-[14px]">Please fill in all the fields</p>
             )}
             <Link to='/user-authentication/login'>
-              Already have a Account
+              Continue to Login
             </Link>
             {status ?
               (<div className='text-green-500'>

@@ -206,17 +206,24 @@ export const getSignup = createAsyncThunk(
 
         try{
             const response = await fetch(url, options);
+            console.log(response);
             if (response.ok) {
                 const result = await response.json();
                 return result;
             } else {
-                return rejectWithValue({error: 'Signing Fetching Fails'})
+                const errorResponse = await response.json();
+
+                if (errorResponse) {
+                    return rejectWithValue({ error: errorResponse });
+                } else {
+                    return rejectWithValue({ error: 'Request failed. Please try again.' });
+                }
             }
         } catch (e) {
-            console.log(e)
+            return rejectWithValue({error: e})
         }
     }
-)  
+)
 
 export const gettingWatchList =createAsyncThunk(
     'watchListGetting/gettingWatchList',
