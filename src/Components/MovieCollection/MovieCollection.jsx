@@ -26,7 +26,7 @@ const MovieCollection = () => {
         if (value === "prev" && page > 2) {
             setPage((prev) => prev - 1);
             navigate(`/${fetchingInitiator[1]}/page-${page-1}`);
-        } else if (value === "next" && page <= dataLoad.total_pages) {
+        } else if (value === "next" && page < dataLoad.total_pages-1) {
             setPage((prev) => prev + 1);
             navigate(`/${fetchingInitiator[1]}/page-${page+1}`);
         }

@@ -22,11 +22,12 @@ const SearchPage = () => {
     };
 
     const handlerPageControl = (value) => {
+
         if (value === "prev" && page > 2) {
             setPage((prev) => prev - 1);
             navigate(`/${fetchingInitiator[1]}/page-${page-1}`);
             dispatch(gettingSearchList({queryValue: searchQuery, page: page-1}));
-        } else if (value === "next" && page <= dataLoad.total_pages) {
+        } else if (value === "next" && page < dataLoad.total_pages) {
             setPage((prev) => prev + 1);
             navigate(`/${fetchingInitiator[1]}/page-${page+1}`);
             dispatch(gettingSearchList({queryValue: searchQuery, page: page+1}));
@@ -36,7 +37,7 @@ const SearchPage = () => {
     useEffect(()=> {
         setDataLoad(searchResult);
     }, [searchResult, location.pathname])
-    console.log(searchResult.results);
+
     return (
         <>
             {searchResult.results.length !== 0 ?

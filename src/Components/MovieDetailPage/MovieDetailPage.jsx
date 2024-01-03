@@ -131,7 +131,7 @@ const MovieDetailPage = () => {
         if (idCheck) {
           setWatchListStatus(true);
         }
-      }, 2000)
+      }, 0)
       return (()=>clearTimeout(time))
     }
 

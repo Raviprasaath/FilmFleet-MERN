@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import axios from 'axios'
+import { useQuery } from 'react-query'
 
 const initialState = {
     screenMode: "dark",
@@ -45,26 +47,21 @@ const createMovieAsyncThunk = (name, type) => {
     return createAsyncThunk(
       `moviesList/${name}`,
       async ({ page }, { rejectWithValue }) => {
-        const option = {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
-        };
-        const pageNo = page || page.page;
-        const url = `${BASE_URL}${type}?language=en-US&page=${pageNo}`
         try {
-          const response = await fetch(url, option);
-  
-          if (response.ok) {
-            const result = await response.json();
-            return result;
-          } else {
-            return rejectWithValue({ error: 'Movie Fetching Fails' });
-          }
+            const option = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${TMDB_API_TOKEN}`,
+            },
+            };
+            const pageNo = page || page.page;
+            const url = `${BASE_URL}${type}?language=en-US&page=${pageNo}`
+
+            const response = await axios(url, option);
+            return response.data;
         } catch (error) {
-          return rejectWithValue({ error: 'An error occurred during the fetch' });
+            return rejectWithValue({ error: 'An error occurred during the fetch' });
         }
       }
     );
@@ -78,24 +75,20 @@ export const getTopRated = createMovieAsyncThunk('getTopRated', 'top_rated');
 export const gettingSearchList = createAsyncThunk(
     'movieList/gettingSearchList',
     async({queryValue, page}, {rejectWithValue}) => {
-        const option = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${TMDB_API_TOKEN}`
+        try {
+            const option = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${TMDB_API_TOKEN}`
+                }
             }
+            const url = `https://api.themoviedb.org/3/search/movie?query=${queryValue}&include_adult=true&language=en-US&page=${page}`
+            const response = await axios(url, option);
+            return response.data;            
         }
-        const url = `https://api.themoviedb.org/3/search/movie?query=${queryValue}&include_adult=true&language=en-US&page=${page}`
-        try{
-            const response = await fetch(url, option);
-            if (response.ok) {
-                const result = await response.json();
-                return result;
-            } else {
-                return rejectWithValue({error: 'Movie Fetching Fails'})
-            }
-        } catch (e) {
-            console.log(e)
+        catch(error) {
+            return rejectWithValue({error: 'Movie Fetching Fails'})
         }
     }
 )
@@ -103,53 +96,83 @@ export const gettingSearchList = createAsyncThunk(
 export const getSingleMovie = createAsyncThunk(
     'moviesList/getSingleMovie',
     async ({id}, {rejectWithValue}) => {
-        const option = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${TMDB_API_TOKEN}`
+        try {
+            const option = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${TMDB_API_TOKEN}`
+                }
             }
-        }
-        const url = `${BASE_URL}${id}?language=en-US`
-        try{
-            const response = await fetch(url, option);
-            if (response.ok) {
-                const result = await response.json();
-                localStorage.setItem('singleMovieResult',JSON.stringify(result));
-                return result;
-            } else {
-                return rejectWithValue({error: 'Movie Fetching Fails'})
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
-)
-export const getTrailerOut = createAsyncThunk(
-    'moviesList/getTrailerOut',
-    async ({id}, {rejectWithValue}) => {
-        const option = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: `Bearer ${TMDB_API_TOKEN}`
-            }
-        }
-        const url = `${BASE_URL}${id}/videos?language=en-US`
-        try{
-            const response = await fetch(url, option);
-            if (response.ok) {
-                const result = await response.json();
-                return result;
-            } else {
-                return rejectWithValue({error: 'Movie Fetching Fails'})
-            }
-        } catch (e) {
-            console.log(e)
+            const url = `${BASE_URL}${id}?language=en-US`
+            const response = await axios(url, option);
+            localStorage.setItem('singleMovieResult',JSON.stringify(response.data));
+            return response.data;
+        } catch (error) {
+            return rejectWithValue({error: 'Movie Fetching Fails'})            
         }
     }
 )
 
+export const getTrailerOut = createAsyncThunk(
+    'moviesList/getTrailerOut',
+    async ({id}, {rejectWithValue}) => {
+        try {
+            const option = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${TMDB_API_TOKEN}`
+                }
+            }
+            const url = `${BASE_URL}${id}/videos?language=en-US`
+            const response = await axios(url, option);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue({error: 'Movie Fetching Fails'})
+        }
+    }
+)
+
+
+// export const getSignup = createAsyncThunk(
+//     'userDetail/getSignup',
+//     async ({ username, password, email, signing }, { rejectWithValue }) => {
+//         let url;
+//         let body;
+        
+//         if (signing === 'login') {
+//             url = `${SERVER_BASE_URL}auth/login`;
+//             body = {
+//                 email,
+//                 password,
+//             };
+//         } else if (signing === 'register') {
+//           url = `${SERVER_BASE_URL}auth/register`;
+//           body = {
+//             username,
+//             email,
+//             password,
+//           };
+//         }
+        
+//         const options = {
+//             method: 'POST',
+//             body: JSON.stringify(body),
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 accept: 'application/json',
+//             },
+//         };
+        
+//     try {
+//         const response = await axios(url, options);
+//         return response.data;
+//       } catch (error) {
+//         return rejectWithValue({ error: "Signing Fails" });
+//       }
+//     }
+// );
 export const getSignup = createAsyncThunk(
     'userDetail/getSignup',
     async ({username, password, email, signing}, {rejectWithValue}) => {
@@ -193,7 +216,7 @@ export const getSignup = createAsyncThunk(
             console.log(e)
         }
     }
-)
+)  
 
 export const gettingWatchList =createAsyncThunk(
     'watchListGetting/gettingWatchList',
@@ -243,26 +266,21 @@ export const gettingWatchList =createAsyncThunk(
 export const gettingRelatedMovie =createAsyncThunk(
     'movieList/gettingRelatedMovie',
     async ({ value, page }, { rejectWithValue }) => {
-        const option = {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
-        };
-        const pageNo = page || page.page;
-        const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${pageNo}&with_genres=${value}`
         try {
-          const response = await fetch(url, option);
-  
-          if (response.ok) {
-            const result = await response.json();
-            return result;
-          } else {
-            return rejectWithValue({ error: 'Movie Fetching Fails' });
-          }
-        } catch (error) {
-          return rejectWithValue({ error: 'An error occurred during the fetch' });
+            const option = {
+              method: 'GET',
+              headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${TMDB_API_TOKEN}`,
+              },
+            };
+            const pageNo = page || page.page;
+            const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${pageNo}&with_genres=${value}`
+
+            const response = await axios(url, option);
+            return response.data;
+        } catch(error) {
+            return rejectWithValue({ error: 'An error occurred during the fetch' });
         }
     }
 )
@@ -271,28 +289,22 @@ const genresMovieAsyncThunk = (name, type) => {
     return createAsyncThunk(
       `moviesTypeList/${name}`,
       async ({ page }, { rejectWithValue }) => {
-        const option = {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${TMDB_API_TOKEN}`,
-          },
-        };
-        const pageNo = page || page.page;
-        const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${pageNo}&with_genres=${type}`
         try {
-          const response = await fetch(url, option);
-  
-          if (response.ok) {
-            const result = await response.json();
-            return result;
-          } else {
-            return rejectWithValue({ error: 'Movie Fetching Fails' });
-          }
+            const option = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${TMDB_API_TOKEN}`,
+                },
+            };
+            const pageNo = page || page.page;
+            const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${pageNo}&with_genres=${type}`
+            const response = await axios(url, option);
+            return response.data;      
         } catch (error) {
-          return rejectWithValue({ error: 'An error occurred during the fetch' });
+            return rejectWithValue({ error: 'An error occurred during the fetch' });
         }
-      }
+    }
     );
 };
 
