@@ -65,7 +65,7 @@ export default App
 
 
 /*
-
+Lazy Loader individual component UI render
 Redux toolkit
 thunk middleware
 Error boundary

@@ -15,6 +15,8 @@ const MovieCollection = () => {
         HistoryMovie, HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie } = useSelector((state) => state.movieReducer);
     const [page, setPage] = useState(Number(location.pathname.split('/')[2].charAt(5)));
 
+    const [pageDelay, setPageDelay] = useState(true);
+
     const fetchingInitiator = location.pathname.split('/');
 
     const handlerDispatch = (idVal) => {
@@ -126,25 +128,31 @@ const MovieCollection = () => {
 
     useEffect(() => {
         rendering();
-    }, [location.pathname, page]);
+        setPageDelay(true);
+        const timer = setTimeout(()=> {
+            setPageDelay(false);
+        }, 500)
+        return (()=>timer);
 
+    }, [location.pathname, page]);
 
   return (
     <>  
         <div className={`flex flex-col justify-center items-center ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>
             <div id='check'className={`flex flex-row justify-center flex-wrap gap-4 px-2 py-4 `}  >
-                { dataLoad?.results?.map((item)=> (
+                {dataLoad?.results?.map((item)=> (
                     <Link key={item.id} onClick={()=>handlerDispatch(item.id)} to={`${item.title}`}>
+                        {pageDelay ? <div className='w-[180px] h-[250px] bg-gray-500 cursor-pointer flex flex-col justify-center items-center'></div>
+                        :
                         <div className='w-[150px] cursor-pointer flex flex-col justify-center items-center hover:opacity-60'>
-                            {item.poster_path ? 
-                                <img className='w-[150px]' src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="img" /> 
-                                : (<img src={dummyImg} />)
-                            }
+                            <img className='w-[150px]' src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="img" /> 
                             {item.title}
                         </div>
+                        }
                     </Link>
                 ))}
             </div>
+            
             <div className='flex gap-3 '>
                 <button onClick={()=>handlerPageControl("prev")} className="bg-green-500 hover:bg-green-700 text-white text-[1rem] px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-green">
                     Prev
