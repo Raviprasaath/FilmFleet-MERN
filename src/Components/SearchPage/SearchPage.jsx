@@ -13,6 +13,7 @@ const SearchPage = () => {
     const { screenMode, searchResult, searchQuery } = useSelector((state) => state.movieReducer);
     const [page, setPage] = useState(Number(location.pathname.split('/')[2].charAt(5)));
     const [dataLoad, setDataLoad] = useState([]);
+    const [pageDelay, setPageDelay] = useState(true);
 
     const fetchingInitiator = location.pathname.split('/');
 
@@ -23,7 +24,7 @@ const SearchPage = () => {
 
     const handlerPageControl = (value) => {
 
-        if (value === "prev" && page > 2) {
+        if (value === "prev" && page > 1) {
             setPage((prev) => prev - 1);
             navigate(`/${fetchingInitiator[1]}/page-${page-1}`);
             dispatch(gettingSearchList({queryValue: searchQuery, page: page-1}));
@@ -36,22 +37,31 @@ const SearchPage = () => {
 
     useEffect(()=> {
         setDataLoad(searchResult);
+        setPageDelay(true);
+        const timer = setTimeout(()=> {
+            setPageDelay(false);
+        }, 1000)
+        return (()=>timer);
     }, [searchResult, location.pathname])
 
     return (
         <>
-            {searchResult.results.length !== 0 ?
+            {searchResult?.results?.length !== 0 ?
                 (<div className={`flex flex-col justify-center items-center ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>
                     <div id='check'className={`flex flex-row justify-center flex-wrap gap-4 px-2 py-4 `}  >
-                        { dataLoad?.results?.map((item)=> (
+                        {dataLoad?.results?.map((item)=> (
                             <Link key={item.id} onClick={()=>handlerDispatch(item.id)} to={`${item.title}`}>
-                                <div className='w-[150px] cursor-pointer flex flex-col justify-center items-center hover:opacity-60'>
-                                    {item.poster_path ? 
-                                    <img className='w-[150px]' src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="img" />
-                                    :<img src={dummyImg} />
+                                {pageDelay ? <div className='w-[180px] h-[250px] bg-gray-500 cursor-pointer flex flex-col justify-center items-center'></div>
+                                :
+                                <div className='w-[150px] h-[300px] overflow-hidden cursor-pointer flex flex-col justify-center items-center hover:opacity-60'>
+                                    { !item.poster_path ?
+                                        <img className='w-[150px]' src={dummyImg} alt="img" /> 
+                                        :
+                                        <img className='w-[150px]' src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="img" /> 
                                     }
                                     {item.title}
                                 </div>
+                                }
                             </Link>
                         ))}
                     </div>

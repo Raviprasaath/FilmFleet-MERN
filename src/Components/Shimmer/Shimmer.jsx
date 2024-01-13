@@ -33,8 +33,8 @@ const Shimmer = () => {
           },
         }}
       >
-        {arr.map((item) => (
-          <SwiperSlide key={item.id} className="w-[90%]">
+        {arr.map((item, index) => (
+          <SwiperSlide key={index + Math.floor(Math.random())} className="w-[90%]">
             <div className='w-[250px] h-[150px] bg-gray-400'>
             </div>
           </SwiperSlide>

@@ -1,7 +1,7 @@
 import Footer from "./Components/Footer/Footer"
 import Homepage from "./Components/Homepage/Homepage"
 import MovieDetailPage from "./Components/MovieDetailPage/MovieDetailPage"
-import MovieDetailDummyPage from "./Components/MovieDetailDummyPage/MovieDetailDummyPage"
+import MovieDetailDummyPage from "./Components/MovieDetailPage/MovieDetailDummyPage"
 import Category from "./Components/Category/Category"
 
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'

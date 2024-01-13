@@ -100,9 +100,11 @@ const MovieDetailPage = () => {
   }
 
   useEffect(()=> {
-    if (trailerLink) {
-      const key = trailerLink?.results?.filter((item)=>item.name.includes("Trailer")||item.name.includes("Teaser"))
-      setTrailerPath(key[0].key);
+    const keys = trailerLink?.results?.filter((item)=>item.name.includes("Trailer")||item.name.includes("Teaser")) || ''
+    if (trailerLink?.results?.length > 0) {
+      setTrailerPath(keys[0]?.key || '');
+    } else {
+      setTrailerPath('');
     }
     if (userLocalCheck.email) {
       setLoginCheck(true);
@@ -236,7 +238,7 @@ const MovieDetailPage = () => {
             </div>
 
             {showTrailerModal && spinner && (
-              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+              <div className="fixed z-50 top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                 <div className="relative">
                   <button className="absolute top-0 right-0 text-[30px] text-white" onClick={()=>handleCloseTrailerModal()}>
                     <IoMdCloseCircleOutline />

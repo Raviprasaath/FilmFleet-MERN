@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from 'axios'
-import { useQuery } from 'react-query'
+import {BASE_URL} from "../utils/constants"
+import {SERVER_BASE_URL} from "../utils/constants"
+import {TMDB_API_TOKEN} from "../utils/constants"
 
 const initialState = {
     screenMode: "dark",
@@ -34,14 +36,6 @@ const initialState = {
     RomanceMovie: [],
     ThrillerMovie: [],
 }
-
-const BASE_URL = 'https://api.themoviedb.org/3/movie/'
-
-// const SERVER_BASE_URL = "http://localhost:4502/"
-const SERVER_BASE_URL = "https://filmfleet-backend-server.onrender.com/"
-
-const API_KEY = '494170c64724d022e9296a5fa98644eb';
-const TMDB_API_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OTQxNzBjNjQ3MjRkMDIyZTkyOTZhNWZhOTg2NDRlYiIsInN1YiI6IjY0OTAyNGE5MjYzNDYyMDBhZTFjZGI1NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7il3x7f91baELU8ceqe8OYauvsHEJ-lC34vS3Gslqoc'
 
 const createMovieAsyncThunk = (name, type) => {
     return createAsyncThunk(

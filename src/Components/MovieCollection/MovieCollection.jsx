@@ -126,12 +126,14 @@ const MovieCollection = () => {
         }
     };
 
+
+    
     useEffect(() => {
         rendering();
         setPageDelay(true);
         const timer = setTimeout(()=> {
             setPageDelay(false);
-        }, 500)
+        }, 1000)
         return (()=>timer);
 
     }, [location.pathname, page]);
@@ -144,8 +146,12 @@ const MovieCollection = () => {
                     <Link key={item.id} onClick={()=>handlerDispatch(item.id)} to={`${item.title}`}>
                         {pageDelay ? <div className='w-[180px] h-[250px] bg-gray-500 cursor-pointer flex flex-col justify-center items-center'></div>
                         :
-                        <div className='w-[150px] cursor-pointer flex flex-col justify-center items-center hover:opacity-60'>
-                            <img className='w-[150px]' src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="img" /> 
+                        <div className='w-[150px] h-[300px] overflow-hidden cursor-pointer flex flex-col justify-center items-center hover:opacity-60'>
+                            { !item.poster_path ?
+                                <img className='w-[150px]' src={dummyImg} alt="img" /> 
+                                :
+                                <img className='w-[150px]' src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt="img" /> 
+                            }
                             {item.title}
                         </div>
                         }
