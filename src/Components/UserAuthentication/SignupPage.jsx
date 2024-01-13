@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import bg from '../../assets/userpage.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSignup } from '../../slice/slice';
+import { getSignup, gettingSingOut } from '../../slice/slice';
 
 const SignUpPage = () => {
-  const { screenMode } = useSelector((state) => state.movieReducer);
+  const { screenMode, userAuth, error:errorMessageFromSlice } = useSelector((state) => state.movieReducer);
   const [status, setStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [forceLoader, setForceLoader] = useState(false);
+  const [allFieldCheck, setAllFieldCheck] = useState(true);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,6 +37,7 @@ const SignUpPage = () => {
     const isPasswordValid = user.password.trim().length >= 8;
 
     const isAnyFieldMissing = !isUsernameValid || !isEmailValid || !isPasswordValid;
+    setAllFieldCheck(isAnyFieldMissing);
 
     setError({
       username: !isUsernameValid,
@@ -43,21 +47,13 @@ const SignUpPage = () => {
     });
 
     if (!isAnyFieldMissing) {
-      const result = dispatch(getSignup({
+      dispatch(getSignup({
         username: user.username,
         email: user.email,
         password: user.password,
         signing: 'register',
       }));
-
-      result.then(result => {
-        if (result.payload._id || result.payload.accessToken) {
-          setStatus(true);
-          navigateLogin();
-        } else {
-          setErrorMessage(result.payload.error);
-        }
-    });
+      setForceLoader(!forceLoader);
     }
   };
 
@@ -82,6 +78,17 @@ const SignUpPage = () => {
       showGeneralError: false, 
     }));
   };
+
+  useEffect(()=> {
+    if (userAuth._id) {
+      setStatus(true);
+      navigateLogin();
+      dispatch(gettingSingOut());
+    } else {
+      setErrorMessage(errorMessageFromSlice);
+    }
+  }, [userAuth, errorMessageFromSlice])
+
 
 
   return (
@@ -139,7 +146,7 @@ const SignUpPage = () => {
                 Sign Up Success
               </div>):(
               <div className='text-red-500'>
-                {errorMessage}
+                {!allFieldCheck && errorMessage}
               </div>
               )
             }

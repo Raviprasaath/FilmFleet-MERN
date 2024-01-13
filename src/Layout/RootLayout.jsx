@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from "../Components/Navbar/Navbar"
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../Components/Footer/Footer'
-import { useScreenSize } from '../Components/CustomHook/ScreenSize'
+import { useScreenSize } from '../Components/CustomHook/useScreenSize'
 import { Link } from 'react-router-dom';
 import { screenModeToggler, sideBarStore } from '../slice/slice'
 import { CiLight } from "react-icons/ci";

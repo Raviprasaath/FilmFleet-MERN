@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getActionMovie, getAdventureMovie, getAnimationMovie, getComedyMovie, getCrimeMovie, getDocumentaryMovie, getDramaMovie, getFamilyMovie, getFantasyMovie, getHistoryMovie, getHorrorMovie, getMusicMovie, getMysteryMovie, getNowPlaying, getPopular, getRomanceMovie, getThrillerMovie, getTopRated, getUpcoming, gettingWatchList } from '../../slice/slice';
-import Carousel from '../Carousel/Carousel';
 import { Suspense } from 'react';
-import Loader from "../LazyLoader/LazyLoader"
 import Shimmer from '../Shimmer/Shimmer';
-import HomeHeaderCarousel from '../HomeHeaderCarousel/HomeHeaderCarousel';
+import useScrollTop from "../CustomHook/useScrollTop"
 import { Link } from 'react-router-dom';
+import HomeHeaderVideo from '../HomeHeaderVideo/HomeHeaderVideo';
 
 const Homepage = () => {
     const { screenMode, popularMovieList, nowPlayingMovieList, topRatedMovieList, 
@@ -19,7 +18,7 @@ const Homepage = () => {
 
     const LazyCarousel = React.lazy(()=>import("../Carousel/Carousel"));
     const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];   
-
+    useScrollTop();
     useEffect(()=> {
         dispatch(getNowPlaying({ type: 'now_playing', page: 1 }));
         dispatch(getTopRated({ type: 'top_rated', page: 1 }));
@@ -55,13 +54,18 @@ const Homepage = () => {
                 localStorage.setItem('watchList', JSON.stringify(tempArr));
             }))
         }
-    }, [loginCheck])
+
+        
+
+    }, [loginCheck, location.pathname])
 
     return (
         <>
-            <div className={`scroll-smooth w-[100%] m-auto px-4 ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>                
-                <HomeHeaderCarousel />
-                <Link to='upcoming/page-1' state={{type: "upcoming"}}>
+            <div className={`scroll-smooth w-full m-auto ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>                
+                <div className=' w-full'>
+                    <HomeHeaderVideo />
+                </div>
+                <Link to='upcoming/page-1' className='relative z-5' state={{type: "upcoming"}}>
                     <h2 className='cursor-pointer font-bold uppercase px-1 py-2 hover:underline'>Upcoming Movies</h2>
                 </Link>
                 <Suspense fallback={<Shimmer />}>

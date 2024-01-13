@@ -4,12 +4,12 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { useDispatch, useSelector } from 'react-redux'
-import { gettingSearchList, screenModeToggler, searchQueryStore, sideBarStore } from '../../slice/slice';
+import { gettingSearchList, gettingSingOut, screenModeToggler, searchQueryStore, sideBarStore } from '../../slice/slice';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MdWatchLater } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FaBars } from "react-icons/fa";
-import { useScreenSize } from '../CustomHook/ScreenSize';
+import { useScreenSize } from '../CustomHook/useScreenSize';
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -52,6 +52,7 @@ const Navbar = () => {
         localStorage.removeItem('userDetails');
         localStorage.removeItem('watchList');
         setLoginCheck(false);
+        dispatch(gettingSingOut());
     }
 
     const handlerSideBar = () => {
@@ -93,7 +94,7 @@ const Navbar = () => {
 
 
   return (
-    <section className={`flex sticky top-0 z-10 items-center justify-between px-4 ${screenMode==="dark"? 'bg-slate-800 text-white border-b	':'bg-white text-black border-b border-black'}`}>
+    <section className={`flex opacity-99 sticky top-0 z-10 items-center justify-between px-3 ${screenMode==="dark"? 'bg-slate-800 text-white border-b	':'bg-white text-black border-b border-black'}`}>
         {!isWindow && <FaBars onClick={()=>handlerSideBar()} className='absolute'/> }
         <Link to='/'>
             <img src={logo} alt="logo" className='w-[150px] my-3' />

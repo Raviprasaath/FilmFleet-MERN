@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getActionMovie, getAdventureMovie, getAnimationMovie, getComedyMovie, getCrimeMovie, getDocumentaryMovie, getDramaMovie, getFamilyMovie, getFantasyMovie, getHistoryMovie, getHorrorMovie, getMusicMovie, getMysteryMovie, getNowPlaying, getPopular, getRomanceMovie, getSingleMovie, getThrillerMovie, getTopRated, getUpcoming } from '../../slice/slice';
 import dummyImg from "../../assets/vertical-dummy.jpg"
+import useScrollTop from '../CustomHook/useScrollTop';
 
 
 const MovieCollection = () => {
@@ -127,7 +128,7 @@ const MovieCollection = () => {
     };
 
 
-    
+    useScrollTop();
     useEffect(() => {
         rendering();
         setPageDelay(true);

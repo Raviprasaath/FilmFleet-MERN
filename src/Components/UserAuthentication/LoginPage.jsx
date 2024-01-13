@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import bg from '../../assets/userpage.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSignup } from '../../slice/slice';
 
 const LoginPage = () => {
-  const { screenMode } = useSelector((state) => state.movieReducer);
+  const { screenMode, userAuth, error:errorMessageFromSlice } = useSelector((state) => state.movieReducer);
   const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState(false);
+  const [forceLoader, setForceLoader] = useState(false);
+  const [allFieldCheck, setAllFieldCheck] = useState(true);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,6 +32,7 @@ const LoginPage = () => {
     const isPasswordValid = user.password.trim().length >= 8;
 
     const isAnyFieldMissing = !isEmailValid || !isPasswordValid;
+    setAllFieldCheck(isAnyFieldMissing);
 
     setError({
       email: !isEmailValid,
@@ -37,25 +41,25 @@ const LoginPage = () => {
     });
 
     if (!isAnyFieldMissing) {
-      const result = dispatch(getSignup({
+      dispatch(getSignup({
         email: user.email,
         password: user.password,
         signing: 'login',
       }));
-
-      result.then(result => {
-        if (result.payload._id || result.payload.accessToken) {
-          setStatus(true);
-          navigateHome();
-          localStorage.setItem('userDetails', JSON.stringify(result.payload));
-        } else {
-          setErrorMessage(result.payload.error);
-          // setErrorMessage(result); // -> manual error creation my note
-        }
-      })
-
+      setForceLoader(!forceLoader);
     }
   };
+
+  useEffect(()=> {
+      if (userAuth.accessToken) {
+        setStatus(true);
+        navigateHome();
+        localStorage.setItem('userDetails', JSON.stringify(userAuth));
+      } else {
+        setErrorMessage(errorMessageFromSlice);
+      }
+  }, [userAuth, errorMessageFromSlice])
+
 
 
   function navigateHome() {
@@ -122,7 +126,7 @@ const LoginPage = () => {
                 Login Success 
               </div>):(
               <div className='text-red-500'>
-                {errorMessage}
+                {!allFieldCheck && errorMessage}
               </div>
               )
             }
@@ -130,6 +134,8 @@ const LoginPage = () => {
         </div>
         
       </div>
+      
+      
     </>
   )
 }

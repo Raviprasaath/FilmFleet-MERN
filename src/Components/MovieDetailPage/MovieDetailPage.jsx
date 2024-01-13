@@ -6,6 +6,7 @@ import { FidgetSpinner } from 'react-loader-spinner'
 import LazyLoader from '../LazyLoader/LazyLoader';
 import { IoMdCloseCircle } from "react-icons/io";
 import Carousel from '../Carousel/Carousel';
+import useScrollTop from '../CustomHook/useScrollTop';
 
 const MovieDetailPage = () => {
   const { singleMovieFetch, screenMode, trailerLink, isLoading, relatedMovie } = useSelector((state) => state.movieReducer);
@@ -25,7 +26,7 @@ const MovieDetailPage = () => {
 
   const localStore = JSON.parse(localStorage.getItem('watchList')) || [];
   const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];
-
+  useScrollTop();
   const handleWatchTrailer = (id) => {
     dispatch(getTrailerOut({id: id}))
     setCount((prev)=>prev+1);

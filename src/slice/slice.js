@@ -309,6 +309,15 @@ const genresMovieAsyncThunk = (name, type) => {
     );
 };
 
+export const gettingSingOut = createAsyncThunk(
+    'movieList/gettingSingOut', 
+    async ()=> {
+        return null;
+    }
+)
+
+
+
 export const getActionMovie = genresMovieAsyncThunk('getActionMovie', '28');
 export const getAdventureMovie = genresMovieAsyncThunk('getAdventureMovie', '12');
 export const getAnimationMovie = genresMovieAsyncThunk('getAnimationMovie', '16');
@@ -433,7 +442,11 @@ const movieSlices = createSlice({
         .addCase(getSignup.rejected, (state, action)=> {
             state.isLoading = false;
             state.error = action.payload ? action.payload.error : 'Unknown error';
-        })       
+        })
+        
+        .addCase(gettingSingOut.fulfilled, (state, action)=> {
+            state.userAuth = {};
+        })
         
         .addCase(gettingWatchList.pending, (state)=> {
             state.isLoading = true

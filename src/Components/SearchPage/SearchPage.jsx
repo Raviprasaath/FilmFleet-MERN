@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getSingleMovie, gettingSearchList } from '../../slice/slice';
 import gif from "../../assets/no_result.gif"
 import dummyImg from "../../assets/vertical-dummy.jpg"
+import useScrollTop from '../CustomHook/useScrollTop';
 
 
 const SearchPage = () => {
@@ -16,7 +17,7 @@ const SearchPage = () => {
     const [pageDelay, setPageDelay] = useState(true);
 
     const fetchingInitiator = location.pathname.split('/');
-
+    useScrollTop();
     const handlerDispatch = (idVal) => {
         dispatch(getSingleMovie({ id: idVal }));
         localStorage.setItem('movieIdBackup', JSON.stringify(idVal));

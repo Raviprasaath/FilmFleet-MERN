@@ -53,9 +53,9 @@ const Carousel = (props) => {
                 :<img src={dummyImg} />
                 }
                 {item.title}
-                <div className="detail-hidden">
+                {/* <div className="detail-hidden bg-gradient-to-r from-black">
                   {item.overview}
-                </div>
+                </div> */}
               </div>
             </Link>
           </SwiperSlide>

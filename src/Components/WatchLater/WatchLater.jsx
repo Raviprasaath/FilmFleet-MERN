@@ -4,6 +4,7 @@ import { Discuss } from 'react-loader-spinner'
 import { getSingleMovie, gettingWatchList } from '../../slice/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import image from "../../assets/popcorn.png"
+import useScrollTop from '../CustomHook/useScrollTop';
 
 const WatchLater = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const WatchLater = () => {
         localStorage.setItem('movieIdBackup', JSON.stringify(idVal));
     }
 
-    
+    useScrollTop();
 
     useEffect(()=> {
         if (userLocalCheck.email) {
@@ -72,7 +73,6 @@ const WatchLater = () => {
                     </Link>
                 )):(
                     <div className='relative flex flex-col justify-center items-center'>
-                            
                             <img src={image} className='h-[80vh]' alt="" />
                             <p className='text-[35px] absolute bg-red-500 px-4 py-2 rounded-lg left-[42%]'>Its Empty!</p>
                     </div>
