@@ -9,7 +9,7 @@ import useScrollTop from '../CustomHook/useScrollTop';
 const WatchLater = () => {
     const navigate = useNavigate();
     const dispatch= useDispatch();
-    const { screenMode, singleMovieFetch } = useSelector((state) => state.movieReducer);
+    const { screenMode, singleMovieFetch, watchList } = useSelector((state) => state.movieReducer);
     const [loader, setLoader] = useState(true);
     const [dataLoad, setDataLoad] = useState([]);
     const [loginCheck, setLoginCheck] = useState(false);
@@ -28,23 +28,36 @@ const WatchLater = () => {
             setLoginCheck(true);
             setTokenValue(userLocalCheck.accessToken)
 
-            const result = dispatch(gettingWatchList({
+            dispatch(gettingWatchList({
                 tokenValue: userLocalCheck.accessToken,
                 methods: "GET",
                 suffix: "watch-later/",
                 movie: "",
             }))
-            result.then((res=>{
-                const response = res.payload;
-                const tempArr = response.map((item)=>item.detail);
-                setDataLoad(tempArr);
-                setLoader(false);
-            }))
+
+            // result.then((res=>{
+            //     const response = res.payload;
+            //     const tempArr = response.map((item)=>item.detail);
+            //     setDataLoad(tempArr);
+            //     setLoader(false);
+            // }))
 
         } else {
             navigate('/', {replace: true});
         }
     }, [loginCheck]);
+
+    useEffect(()=> {
+        if (watchList) {
+            const response = watchList[0].detail;
+            console.log(response);
+            const tempArr = response.map((item)=>item.detail);
+            setDataLoad(tempArr);
+            setLoader(false);
+        }
+    }, [watchList])
+
+    console.log(watchList);
 
     return (
         <div className={`min-h-[80vh] flex flex-col justify-center items-center ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>

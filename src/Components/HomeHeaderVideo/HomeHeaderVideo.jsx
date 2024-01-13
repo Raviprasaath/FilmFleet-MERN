@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTrailerOut } from '../../slice/slice';
 
 const HomeHeaderVideo = () => {
-    const { popularMovieList, nowPlayingMovieList, topRatedMovieList, 
+    const { trailerLink, popularMovieList, nowPlayingMovieList, topRatedMovieList, 
         upcomingMovieList, actionMovie, adventureMovie, animationMovie, comedyMovie,
         crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie,
         HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie } = useSelector((state) => state.movieReducer);
-    const [trailerKey, setTrailerKey] = useState('');
+    const [trailerKey, setTrailerKey] = useState('1DJYiG6wh0w');
     const [indexNum, setIndexNum] = useState(0);
     const [movieNumber, setMovieNumber] = useState(0);
 
@@ -28,24 +28,27 @@ const HomeHeaderVideo = () => {
         
         const time = setTimeout(()=> {
             let num = indexNumber;
-            const fetch = dispatch(getTrailerOut( {id: array[num]?.results[randomMovie]?.id} ));
-            fetch.then((result)=> {
-                const response = result.payload.results;
-                if (response) {
-                    const keyFilter = response.filter((movie)=>movie.type === 'Trailer' || 'Teaser')
-                    let filterFromKey = keyFilter[0];
-                    if (keyFilter.length > 1) {
-                        filterFromKey = keyFilter.filter((movie)=>movie.name.includes('Trailer'));
-                    }
-                    setTrailerKey(filterFromKey[0].key);
-                    setIndexNum(num);
-                }
-            })
+            dispatch(getTrailerOut( {id: array[num]?.results[randomMovie]?.id} ));
+            setIndexNum(num);
             setRenderDelay(true);
         }, 100)
 
         return (()=> clearTimeout(time));
     }, [FantasyMovie])
+
+    useEffect(()=> {
+        if (trailerLink?.results?.length > 0) {
+            console.log(trailerLink.results);
+            const keyFilter = trailerLink.results.filter((movie)=>movie.type === 'Trailer' || 'Teaser')
+            let filterFromKey = keyFilter[0];
+            if (keyFilter.length > 1) {
+                filterFromKey = keyFilter.filter((movie)=>movie.name.includes('Trailer'));
+                setTrailerKey(filterFromKey[0].key);
+            } else {
+                setTrailerKey(filterFromKey.key);
+            }
+        }
+    }, [trailerLink])
 
 
     return (
