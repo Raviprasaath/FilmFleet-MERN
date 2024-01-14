@@ -61,7 +61,7 @@ const Homepage = () => {
 
     return (
         <>
-            <div className={`scroll-smooth w-full m-auto ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>                
+            <div className={`scroll-smooth w-full px-4 lg:px-0 m-auto ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>                
                 <div className=' w-full'>
                     <HomeHeaderVideo />
                 </div>

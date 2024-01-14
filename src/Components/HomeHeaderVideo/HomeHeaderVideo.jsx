@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getTrailerOut } from '../../slice/slice';
 import LazyLoader from '../LazyLoader/LazyLoader';
+import { useScreenSize } from '../CustomHook/useScreenSize';
 
 const HomeHeaderVideo = () => {
     const { trailerLink, adventureMovie, animationMovie, FantasyMovie, HistoryMovie,MusicMovie, RomanceMovie } = useSelector((state) => state.movieReducer);
     const [trailerKey, setTrailerKey] = useState('1DJYiG6wh0w');
     const [indexNum, setIndexNum] = useState(0);
     const [movieNumber, setMovieNumber] = useState(0);
+    const screen = useScreenSize();
+
 
     const [renderDelay, setRenderDelay] = useState(false);
     const dispatch = useDispatch();
@@ -51,8 +54,8 @@ const HomeHeaderVideo = () => {
         <>
             {renderDelay ?
             <>
-                <div className='w-full relative -my-20'>
-                    <div className='w-full mm:h-[400px] sm:h-[450px] md:h-[600px] lg:h-[650px] xl:h-[790px] '>
+                <div className='w-full relative sm:-my-10 lg:-my-20 '>
+                    <div className='w-full mm:h-[250px] sm:h-[300px] md:h-[600px] lg:h-[650px] xl:h-[790px] '>
                     <iframe
                         className="w-full aspect-video"
                         src={ "https://www.youtube.com/embed/" + trailerKey + "?&autoplay=1&mute=1&loop=1" }
@@ -60,14 +63,24 @@ const HomeHeaderVideo = () => {
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     ></iframe>
                     </div>
-                    <div className='absolute top-0 px-10 left-0 w-full aspect-video bg-gradient-to-r from-gray-800 from-5% via-transparent via-50% to-transparent to-100%'>
-                        <p className='font-bold uppercase pt-[30%] text-3xl'>
-                            {array[indexNum]?.results[movieNumber]?.title || array[indexNum]?.results[movieNumber]?.original_title}
-                        </p>
-                        <p className=' mm:w-full sm:w-full md:w-1/2 lg:w-3/4 xl:w-2/5 py-4 font-mono font-bold'>
-                            {array[indexNum].results[movieNumber].overview}
-                        </p>
-                    </div>
+                    {screen > 960 ?
+                        <div className='absolute top-0 px-10 left-0 w-full aspect-video bg-gradient-to-r from-gray-800 from-5% via-transparent via-50% to-transparent to-100%'>
+                            <p className='text-white font-bold uppercase pt-[30%] text-3xl'>
+                                {array[indexNum]?.results[movieNumber]?.title || array[indexNum]?.results[movieNumber]?.original_title}
+                            </p>
+                            <p className='text-white mm:w-full sm:w-full md:w-1/2 lg:w-3/4 xl:w-2/5 py-4 font-mono font-bold'>
+                                {array[indexNum].results[movieNumber].overview}
+                            </p>
+                        </div> : 
+                        <div className='absolute top-0 px-10 left-0 w-full aspect-video bg-gradient-to-r from-gray-800 from-5% via-transparent via-50% to-transparent to-100%'>
+                            <p className='text-white font-bold uppercase pt-12 text-sm'>
+                                Movie - {array[indexNum]?.results[movieNumber]?.title || array[indexNum]?.results[movieNumber]?.original_title}
+                            </p>
+                            <p className='text-white mm:w-full sm:w-full md:w-1/2 lg:w-3/4 xl:w-2/5 py-4 font-mono text-[12px] overflow-hidden h-[250px]'>
+                                {array[indexNum].results[movieNumber].overview}
+                            </p>
+                        </div>
+                    }
                 </div>
             </> : 
             <>
