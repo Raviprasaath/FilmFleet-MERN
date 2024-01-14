@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getTrailerOut } from '../../slice/slice';
+import LazyLoader from '../LazyLoader/LazyLoader';
 
 const HomeHeaderVideo = () => {
     const { trailerLink, popularMovieList, nowPlayingMovieList, topRatedMovieList, 
@@ -19,19 +20,18 @@ const HomeHeaderVideo = () => {
         upcomingMovieList, actionMovie, adventureMovie, animationMovie, comedyMovie,
         crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie,
         HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie];
-        
-        
+
     useEffect(()=> {
         const indexNumber = Math.floor(Math.random()*array.length+1);
         const randomMovie = Math.floor(Math.random()*7+1);
         setMovieNumber(randomMovie);
-        
+
         const time = setTimeout(()=> {
             let num = indexNumber;
             dispatch(getTrailerOut( {id: array[num]?.results[randomMovie]?.id} ));
             setIndexNum(num);
             setRenderDelay(true);
-        }, 100)
+        }, 500)
 
         return (()=> clearTimeout(time));
     }, [FantasyMovie])
@@ -53,7 +53,7 @@ const HomeHeaderVideo = () => {
 
     return (
         <>
-            {renderDelay &&
+            {renderDelay ?
             <>
                 <div className='w-full relative -my-20'>
                     <div className='w-full mm:h-[400px] sm:h-[450px] md:h-[600px] lg:h-[650px] xl:h-[790px] '>
@@ -73,7 +73,11 @@ const HomeHeaderVideo = () => {
                         </p>
                     </div>
                 </div>
-                
+            </> : 
+            <>
+                <div className='w-full mm:h-[400px] sm:h-[450px] md:h-[600px] lg:h-[650px] xl:h-[790px] flex justify-center items-center'>
+                    <LazyLoader />
+                </div>
             </>
             }
         </>
