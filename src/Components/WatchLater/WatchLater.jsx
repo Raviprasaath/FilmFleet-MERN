@@ -34,30 +34,22 @@ const WatchLater = () => {
                 suffix: "watch-later/",
                 movie: "",
             }))
-
-            // result.then((res=>{
-            //     const response = res.payload;
-            //     const tempArr = response.map((item)=>item.detail);
-            //     setDataLoad(tempArr);
-            //     setLoader(false);
-            // }))
-
         } else {
             navigate('/', {replace: true});
         }
     }, [loginCheck]);
 
     useEffect(()=> {
-        if (watchList) {
-            const response = watchList[0].detail;
-            console.log(response);
-            const tempArr = response.map((item)=>item.detail);
-            setDataLoad(tempArr);
-            setLoader(false);
-        }
-    }, [watchList])
+        const time  = setTimeout(()=> {
+            if (watchList) {
+                const response = watchList.map((item)=>item.detail);
+                setDataLoad(response);
+                setLoader(false);
+            }
+        }, 10)
 
-    console.log(watchList);
+        return (()=>clearTimeout(time));
+    }, [watchList])
 
     return (
         <div className={`min-h-[80vh] flex flex-col justify-center items-center ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>

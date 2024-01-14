@@ -18,8 +18,8 @@ const HomeHeaderVideo = () => {
     
     const array = [popularMovieList, nowPlayingMovieList, topRatedMovieList, 
         upcomingMovieList, actionMovie, adventureMovie, animationMovie, comedyMovie,
-        crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie,
-        HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie];
+        crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie, 
+        MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie];
 
     useEffect(()=> {
         const indexNumber = Math.floor(Math.random()*array.length+1);
@@ -38,7 +38,6 @@ const HomeHeaderVideo = () => {
 
     useEffect(()=> {
         if (trailerLink?.results?.length > 0) {
-            console.log(trailerLink.results);
             const keyFilter = trailerLink.results.filter((movie)=>movie.type === 'Trailer' || 'Teaser')
             let filterFromKey = keyFilter[0];
             if (keyFilter.length > 1) {
