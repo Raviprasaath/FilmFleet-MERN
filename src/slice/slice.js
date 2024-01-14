@@ -200,7 +200,6 @@ export const getSignup = createAsyncThunk(
 
         try{
             const response = await fetch(url, options);
-            console.log(response);
             if (response.ok) {
                 const result = await response.json();
                 return result;

@@ -3,6 +3,7 @@ import bg from '../../assets/userpage.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSignup, gettingSingOut } from '../../slice/slice';
+import { useScreenSize } from '../CustomHook/useScreenSize';
 
 const SignUpPage = () => {
   const { screenMode, userAuth, error:errorMessageFromSlice } = useSelector((state) => state.movieReducer);
@@ -10,6 +11,8 @@ const SignUpPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [forceLoader, setForceLoader] = useState(false);
   const [allFieldCheck, setAllFieldCheck] = useState(true);
+  const screen = useScreenSize();
+  console.log(screen < 760);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -93,9 +96,10 @@ const SignUpPage = () => {
 
   return (
     <>
-      <div className={`flex ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>
-        
-        <img className="w-[60%]" src={bg} alt="background" />
+      <div className={`flex h-dvh justify-center ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>
+      {screen > 960 &&
+        <img className="h-fit w-[60%]" src={bg} alt="background" />
+      }
         <div className='flex flex-col justify-center w-[40%]'>
           <h2 className='text-[28px] my-5 text-center font-bold'>SIGN UP</h2>
           <form onSubmit={handleUserForm} className=" flex flex-col gap-2 justify-center items-center">

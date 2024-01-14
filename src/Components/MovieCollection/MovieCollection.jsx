@@ -147,7 +147,7 @@ const MovieCollection = () => {
                     <Link key={item.id} onClick={()=>handlerDispatch(item.id)} to={`${item.title}`}>
                         {pageDelay ? <div className='w-[180px] h-[250px] bg-gray-500 cursor-pointer flex flex-col justify-center items-center'></div>
                         :
-                        <div className='w-[150px] h-[300px] overflow-hidden cursor-pointer flex flex-col justify-center items-center hover:opacity-60'>
+                        <div className='w-[150px] h-[300px] overflow-hidden cursor-pointer flex flex-col items-center hover:opacity-60'>
                             { !item.poster_path ?
                                 <img className='w-[150px]' src={dummyImg} alt="img" /> 
                                 :

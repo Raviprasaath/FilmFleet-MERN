@@ -44,7 +44,9 @@ const Carousel = (props) => {
           },
         }}
       >
-        {props.props?.results?.slice((Math.floor(Math.random() * 10) + 1), (Math.floor(Math.random() * 10) + 20))?.map((item) => (
+        {/* {props.props?.results?.slice((Math.floor(Math.random() * 10) + 1), (Math.floor(Math.random() * 10) + 20))?.map((item) => ( */}
+        {/* {props.props?.results?.map((item) => ( */}
+        {props.props?.results?.slice(5, 15)?.map((item) => (
           <SwiperSlide key={item.id} className="w-[90%]">
             <Link onClick={()=>handlerDispatch(item.id)} to={`/movie/${item.title}`}>
               <div className="my-2 movie-title relatives relative cursor-pointer h-[200px] flex flex-col py-4 hover:scale-[1.07]">

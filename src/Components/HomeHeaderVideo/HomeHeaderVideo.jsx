@@ -4,51 +4,48 @@ import { getTrailerOut } from '../../slice/slice';
 import LazyLoader from '../LazyLoader/LazyLoader';
 
 const HomeHeaderVideo = () => {
-    const { trailerLink, popularMovieList, nowPlayingMovieList, topRatedMovieList, 
-        upcomingMovieList, actionMovie, adventureMovie, animationMovie, comedyMovie,
-        crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie,
-        HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie } = useSelector((state) => state.movieReducer);
+    const { trailerLink, adventureMovie, animationMovie, FantasyMovie, HistoryMovie,MusicMovie, RomanceMovie } = useSelector((state) => state.movieReducer);
     const [trailerKey, setTrailerKey] = useState('1DJYiG6wh0w');
     const [indexNum, setIndexNum] = useState(0);
     const [movieNumber, setMovieNumber] = useState(0);
 
     const [renderDelay, setRenderDelay] = useState(false);
     const dispatch = useDispatch();
-  
-    
-    const array = [popularMovieList, nowPlayingMovieList, topRatedMovieList, 
-        upcomingMovieList, actionMovie, adventureMovie, animationMovie, comedyMovie,
-        crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie, 
-        MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie];
+
+    const array = [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie];
 
     useEffect(()=> {
-        const indexNumber = Math.floor(Math.random()*array.length+1);
-        const randomMovie = Math.floor(Math.random()*7+1);
+        let indexNumber = Math.floor(Math.random()*array.length);
+        let randomMovie = Math.floor(20 % Math.random()*20+1);
         setMovieNumber(randomMovie);
-
+        
         const time = setTimeout(()=> {
             let num = indexNumber;
             dispatch(getTrailerOut( {id: array[num]?.results[randomMovie]?.id} ));
             setIndexNum(num);
-            setRenderDelay(true);
         }, 500)
 
         return (()=> clearTimeout(time));
-    }, [FantasyMovie])
+    }, [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie])
 
     useEffect(()=> {
-        if (trailerLink?.results?.length > 0) {
-            const keyFilter = trailerLink.results.filter((movie)=>movie.type === 'Trailer' || 'Teaser')
-            let filterFromKey = keyFilter[0];
-            if (keyFilter.length > 1) {
-                filterFromKey = keyFilter.filter((movie)=>movie.name.includes('Trailer'));
-                setTrailerKey(filterFromKey[0].key);
-            } else {
-                setTrailerKey(filterFromKey.key);
+        const time = setTimeout(()=> {
+            if (trailerLink?.results?.length > 0) {
+                const keyFilter = trailerLink.results.filter((movie)=>movie.type === 'Trailer' || 'Teaser')
+                let filterFromKey = keyFilter[0];
+                if (keyFilter.length > 1) {
+                    filterFromKey = keyFilter.filter((movie)=>movie.name.includes('Trailer'));
+                    setTrailerKey(filterFromKey[0].key);
+                } else {
+                    setTrailerKey(filterFromKey.key);
+                }
+                setRenderDelay(true);
             }
-        }
-    }, [trailerLink])
 
+        }, 1000)
+        return (()=> clearTimeout(time));
+
+    }, [trailerLink])
 
     return (
         <>

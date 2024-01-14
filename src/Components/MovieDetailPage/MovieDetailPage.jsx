@@ -42,6 +42,10 @@ const MovieDetailPage = () => {
   const handleCloseTrailerModal = () => {
     setShowTrailerModal(false);
   };
+  const handleCloseTrailerModal2 = (event) => {
+    event.stopPropagation();
+    setShowTrailerModal(false);
+  }
 
   const handlerAddToWatchList = (movie) => {
     if (loginCheck) {
@@ -239,7 +243,7 @@ const MovieDetailPage = () => {
             </div>
 
             {showTrailerModal && spinner && (
-              <div className="fixed z-50 top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+              <div onClick={(e)=>handleCloseTrailerModal2(e)} className="fixed z-50 top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                 <div className="relative">
                   <button className="absolute top-0 right-0 text-[30px] text-white" onClick={()=>handleCloseTrailerModal()}>
                     <IoMdCloseCircleOutline />
