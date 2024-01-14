@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getTrailerOut } from '../../slice/slice';
 import LazyLoader from '../LazyLoader/LazyLoader';
@@ -7,26 +7,32 @@ import { useScreenSize } from '../CustomHook/useScreenSize';
 const HomeHeaderVideo = () => {
     const { trailerLink, adventureMovie, animationMovie, FantasyMovie, HistoryMovie,MusicMovie, RomanceMovie } = useSelector((state) => state.movieReducer);
     const [trailerKey, setTrailerKey] = useState('1DJYiG6wh0w');
-    const [indexNum, setIndexNum] = useState(0);
-    const [movieNumber, setMovieNumber] = useState(0);
-    const screen = useScreenSize();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [indexNumber, setIndexNumber] = useState();
+    const [randomMovie, setRandomMovie] = useState();
 
+    const screen = useScreenSize();
 
     const [renderDelay, setRenderDelay] = useState(false);
     const dispatch = useDispatch();
 
     const array = [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie];
 
+    
     useEffect(()=> {
-        let indexNumber = Math.floor(Math.random()*array.length);
-        let randomMovie = Math.floor(20 % Math.random()*20+1);
-        setMovieNumber(randomMovie);
-        
+        setIndexNumber(Math.floor(Math.random()*array.length));
+        setRandomMovie(Math.floor(20 % Math.random()*20+1));
+    }, [])
+
+    useEffect(()=> {
         const time = setTimeout(()=> {
-            let num = indexNumber;
-            dispatch(getTrailerOut( {id: array[num]?.results[randomMovie]?.id} ));
-            setIndexNum(num);
-            setRenderDelay(true);
+            dispatch(getTrailerOut( {id: array[indexNumber]?.results[randomMovie]?.id} ));
+
+
+            
+            setTitle(array[indexNumber]?.results[randomMovie]?.title || array[indexNumber]?.results[randomMovie]?.original_title)
+            setDescription(array[indexNumber]?.results[randomMovie]?.overview);
         }, 0)
 
         return (()=> clearTimeout(time));
@@ -43,13 +49,15 @@ const HomeHeaderVideo = () => {
                 } else {
                     setTrailerKey(filterFromKey.key);
                 }
-                
+                setRenderDelay(true);
             }
         }, 0)
+
         return (()=> clearTimeout(time));
 
     }, [trailerLink])
 
+    
     return (
         <>
             {renderDelay ?
@@ -66,18 +74,18 @@ const HomeHeaderVideo = () => {
                     {screen > 960 ?
                         <div className='absolute top-0 px-10 left-0 w-full aspect-video bg-gradient-to-r from-gray-800 from-5% via-transparent via-50% to-transparent to-100%'>
                             <p className='text-white font-bold uppercase pt-[30%] text-3xl'>
-                                {array[indexNum]?.results[movieNumber]?.title || array[indexNum]?.results[movieNumber]?.original_title}
+                                {title}
                             </p>
                             <p className='text-white mm:w-full sm:w-full md:w-1/2 lg:w-3/4 xl:w-2/5 py-4 font-mono font-bold'>
-                                {array[indexNum].results[movieNumber].overview}
+                                {description}
                             </p>
                         </div> : 
                         <div className='absolute top-0 px-10 left-0 w-full aspect-video bg-gradient-to-r from-gray-800 from-5% via-transparent via-50% to-transparent to-100%'>
                             <p className='text-white font-bold uppercase pt-12 text-sm'>
-                                Movie - {array[indexNum]?.results[movieNumber]?.title || array[indexNum]?.results[movieNumber]?.original_title}
+                                Movie - {title}
                             </p>
                             <p className='text-white mm:w-full sm:w-full md:w-1/2 lg:w-3/4 xl:w-2/5 py-4 font-mono text-[12px] overflow-hidden h-[250px]'>
-                                {array[indexNum].results[movieNumber].overview}
+                                { description}
                             </p>
                         </div>
                     }

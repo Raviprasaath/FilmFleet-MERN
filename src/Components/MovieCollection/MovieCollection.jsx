@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getActionMovie, getAdventureMovie, getAnimationMovie, getComedyMovie, getCrimeMovie, getDocumentaryMovie, getDramaMovie, getFamilyMovie, getFantasyMovie, getHistoryMovie, getHorrorMovie, getMusicMovie, getMysteryMovie, getNowPlaying, getPopular, getRomanceMovie, getSingleMovie, getThrillerMovie, getTopRated, getUpcoming } from '../../slice/slice';
 import dummyImg from "../../assets/vertical-dummy.jpg"
 import useScrollTop from '../CustomHook/useScrollTop';
-
+import { Shimmer } from 'react-shimmer'
 
 const MovieCollection = () => {
     const location = useLocation();
@@ -145,7 +145,7 @@ const MovieCollection = () => {
             <div id='check'className={`flex flex-row justify-center flex-wrap gap-4 px-2 py-4 `}  >
                 {dataLoad?.results?.map((item)=> (
                     <Link key={item.id} onClick={()=>handlerDispatch(item.id)} to={`${item.title}`}>
-                        {pageDelay ? <div className='w-[180px] h-[250px] bg-gray-500 cursor-pointer flex flex-col justify-center items-center'></div>
+                        {pageDelay ? <Shimmer width={180} height={250}/>
                         :
                         <div className='w-[150px] h-[300px] overflow-hidden cursor-pointer flex flex-col items-center hover:opacity-60'>
                             { !item.poster_path ?

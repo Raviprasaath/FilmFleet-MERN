@@ -2,8 +2,9 @@ import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css/navigation';
+import { Shimmer } from 'react-shimmer'
 
-const Shimmer = () => {
+const ShimmerLoader = () => {
     let arr = ['a','b','a','b','a','b','a','b','a','b'];
   return (
 
@@ -35,8 +36,7 @@ const Shimmer = () => {
       >
         {arr.map((item, index) => (
           <SwiperSlide key={index + Math.floor(Math.random())} className="w-[90%]">
-            <div className='w-[250px] h-[150px] bg-gray-400'>
-            </div>
+            <Shimmer width={250} height={150} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -44,4 +44,4 @@ const Shimmer = () => {
   )
 }
 
-export default Shimmer
+export default ShimmerLoader

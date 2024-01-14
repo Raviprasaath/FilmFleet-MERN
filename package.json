@@ -25,6 +25,8 @@
     "react-query": "^3.39.3",
     "react-redux": "^9.0.4",
     "react-router-dom": "^6.21.1",
+    "react-shimmer": "^3.2.0",
+    "react-spinners": "^0.13.8",
     "suspense": "^0.0.52",
     "swiper": "^11.0.5"
   },

@@ -4,9 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSignup, gettingSingOut } from '../../slice/slice';
 import { useScreenSize } from '../CustomHook/useScreenSize';
+import CircleLoader from 'react-spinners/CircleLoader'
 
 const SignUpPage = () => {
-  const { screenMode, userAuth, error:errorMessageFromSlice } = useSelector((state) => state.movieReducer);
+  const { screenMode, userAuth, error:errorMessageFromSlice, isLoading } = useSelector((state) => state.movieReducer);
   const [status, setStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [forceLoader, setForceLoader] = useState(false);
@@ -99,7 +100,7 @@ const SignUpPage = () => {
       {screen > 960 &&
         <img className="h-fit w-[60%]" src={bg} alt="background" />
       }
-        <div className='flex flex-col justify-center w-[40%]'>
+        <div className='flex h-fit flex-col justify-center w-[40%]'>
           <h2 className='text-[28px] my-5 text-center font-bold'>SIGN UP</h2>
           <form onSubmit={handleUserForm} className=" flex flex-col gap-2 justify-center items-center">
             <label htmlFor="username">USER NAME</label>
@@ -155,6 +156,14 @@ const SignUpPage = () => {
             }
           </form>
         </div>
+        {isLoading && 
+          <div className='absolute flex justify-center items-center bg-black opacity-50 w-full h-full'>
+            <CircleLoader 
+            size={250}
+            color="white"
+            />
+          </div>
+        }
       </div>
     </>
   );
