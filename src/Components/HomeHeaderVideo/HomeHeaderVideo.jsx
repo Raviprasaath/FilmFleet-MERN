@@ -23,7 +23,8 @@ const HomeHeaderVideo = () => {
             let num = indexNumber;
             dispatch(getTrailerOut( {id: array[num]?.results[randomMovie]?.id} ));
             setIndexNum(num);
-        }, 500)
+            setRenderDelay(true);
+        }, 0)
 
         return (()=> clearTimeout(time));
     }, [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie])
@@ -39,10 +40,9 @@ const HomeHeaderVideo = () => {
                 } else {
                     setTrailerKey(filterFromKey.key);
                 }
-                setRenderDelay(true);
+                
             }
-
-        }, 1000)
+        }, 0)
         return (()=> clearTimeout(time));
 
     }, [trailerLink])

@@ -12,7 +12,6 @@ const SignUpPage = () => {
   const [forceLoader, setForceLoader] = useState(false);
   const [allFieldCheck, setAllFieldCheck] = useState(true);
   const screen = useScreenSize();
-  console.log(screen < 760);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
