@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSignup, gettingSingOut } from '../../slice/slice';
 import { useScreenSize } from '../CustomHook/useScreenSize';
 import CircleLoader from 'react-spinners/CircleLoader'
+import useScrollTop from '../CustomHook/useScrollTop';
 
 const SignUpPage = () => {
   const { screenMode, userAuth, error:errorMessageFromSlice, isLoading } = useSelector((state) => state.movieReducer);
@@ -92,7 +93,7 @@ const SignUpPage = () => {
     }
   }, [userAuth, errorMessageFromSlice])
 
-
+  useScrollTop();
 
   return (
     <>
