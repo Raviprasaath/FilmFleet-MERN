@@ -11,7 +11,6 @@ const MovieCreditDetails = () => {
         setTeamDetails([]);
 
         const newTeamDetails = [
-            ...teamDetails,
             crew?.crew?.find((person) => person.known_for_department === 'Sound'),
             crew?.crew?.find((person) => person.known_for_department === 'Directing'),
             crew?.crew?.find((person) => person.known_for_department === 'Camera'),
