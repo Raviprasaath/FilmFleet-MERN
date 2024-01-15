@@ -6,12 +6,12 @@ const MovieCreditDetails = () => {
     const { crew } = useSelector((state)=>state.movieReducer);
 
     const [teamDetails, setTeamDetails] = useState([]);
-    console.log(crew);
+
     useEffect(() => {
         setTeamDetails([]);
 
         const newTeamDetails = [
-            crew?.crew?.find((person) => person.job === 'Original Music Composer'),
+            crew?.crew?.find((person) => person.job === 'Original Music Composer' ||person.job === 'Music'),
             crew?.crew?.find((person) => person.job === 'Director'),
             crew?.crew?.find((person) => person.job === 'Director of Photography'),
             crew?.crew?.find((person) => person.job === 'Editor'),
