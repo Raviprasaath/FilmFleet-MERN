@@ -35,6 +35,7 @@ const initialState = {
     MysteryMovie: [],
     RomanceMovie: [],
     ThrillerMovie: [],
+    crew: [],
 }
 
 const createMovieAsyncThunk = (name, type) => {
@@ -78,6 +79,27 @@ export const gettingSearchList = createAsyncThunk(
                 }
             }
             const url = `https://api.themoviedb.org/3/search/movie?query=${queryValue}&include_adult=true&language=en-US&page=${page}`
+            const response = await axios(url, option);
+            return response.data;            
+        }
+        catch(error) {
+            return rejectWithValue({error: 'Movie Fetching Fails'})
+        }
+    }
+)
+
+export const gettingTeamDetails = createAsyncThunk(
+    'movieList/gettingTeamDetails',
+    async({id}, {rejectWithValue}) => {
+        try {
+            const option = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${TMDB_API_TOKEN}`
+                }
+            }
+            const url = BASE_URL + id +'/credits?language=en-US'
             const response = await axios(url, option);
             return response.data;            
         }
@@ -314,6 +336,8 @@ export const gettingSingOut = createAsyncThunk(
         return null;
     }
 )
+
+
 
 
 
@@ -677,6 +701,19 @@ const movieSlices = createSlice({
             state.error = ''
         })
         .addCase(getThrillerMovie.rejected, (state, action)=> {
+            state.isLoading = false;
+            state.error = action.payload ? action.payload.error : 'Unknown error';
+        })       
+        
+        .addCase(gettingTeamDetails.pending, (state)=> {
+            state.isLoading = true
+        })
+        .addCase(gettingTeamDetails.fulfilled, (state, action)=> {
+            state.isLoading = false,
+            state.crew = action.payload,
+            state.error = ''
+        })
+        .addCase(gettingTeamDetails.rejected, (state, action)=> {
             state.isLoading = false;
             state.error = action.payload ? action.payload.error : 'Unknown error';
         })       
