@@ -41,7 +41,7 @@ const WatchLater = () => {
 
     useEffect(()=> {
         const time  = setTimeout(()=> {
-            if (watchList) {
+            if (watchList.length > 0) {
                 const response = watchList.map((item)=>item.detail);
                 setDataLoad(response);
                 setLoader(false);

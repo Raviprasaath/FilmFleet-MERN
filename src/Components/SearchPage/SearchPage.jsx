@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getSingleMovie, gettingSearchList } from '../../slice/slice';
 import gif from "../../assets/no_result.gif"
+import wentWrong from "../../assets/oops-something-went-wrong-vector.jpg"
 import dummyImg from "../../assets/vertical-dummy.jpg"
 import useScrollTop from '../CustomHook/useScrollTop';
 import { Shimmer } from 'react-shimmer';
@@ -45,6 +46,15 @@ const SearchPage = () => {
         }, 1000)
         return (()=>timer);
     }, [searchResult, location.pathname])
+
+    if (searchResult.length === 0) {
+        return (
+            <div className='flex justify-center items-center'>
+                <h1 className='absolute top-28 text-[2vw] text-gray-500 font-extrabold'>Search Again</h1>
+                <img src={wentWrong} alt='gif-img' className='w-[60vw]' />
+            </div>
+        )
+    }
 
     return (
         <>

@@ -64,13 +64,23 @@ const Navbar = () => {
         setTypingValues(e.target.value);
     }
 
-    const searchBtn = () => {
+    function searchFunctionality () {
         if (typingValues) {
             setSearchValue(typingValues);
             dispatch(gettingSearchList({queryValue: typingValues, page: 1}));
             dispatch(searchQueryStore(typingValues));
             navigate('/search-result', {replace: true})
             setTypingValues('')
+        }
+    }
+
+    const searchBtn = () => {
+        searchFunctionality();
+    }
+
+     const handleKeyDown = (event) => {
+        if (event.keyCode === 13) {
+            searchFunctionality();
         }
     }
 
@@ -101,8 +111,12 @@ const Navbar = () => {
         </Link>
         <div className='flex gap-4 items-center justify-center'>
             <div className='flex items-center justify-center gap-4'>
-                <input onChange={(e)=>handlerSearch(e)} value={typingValues} type="text" className={`border-b	w-[150px] ${screenMode==="dark"? 'bg-slate-800 text-white':'bg-white text-black border-black'}`} />
-                <FaSearch onClick={()=>searchBtn()} className='hover:text-gray-400' />
+                <input onKeyDown={handleKeyDown} onChange={(e)=>handlerSearch(e)} value={typingValues} type="text" className={`border-b	w-[150px] ${screenMode==="dark"? 'bg-slate-800 text-white':'bg-white text-black border-black'}`} />
+                <FaSearch 
+                    onClick={searchBtn}
+                    className='hover:text-gray-400' 
+                />
+
             </div>
             {isWindow &&
                 <>

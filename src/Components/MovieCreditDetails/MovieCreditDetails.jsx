@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { IMG_URL } from '../../utils/constants';
 
 const MovieCreditDetails = () => {
-    const { crew } = useSelector((state)=>state.movieReducer);
+    const { crew, screenMode } = useSelector((state)=>state.movieReducer);
 
     const [teamDetails, setTeamDetails] = useState([]);
 
@@ -38,8 +38,8 @@ const MovieCreditDetails = () => {
                                 <div className='h-[150px] w-[150px] rounded-full bg-gray-400'></div>
                             }
                             <div className='flex flex-col justify-center w-36 overflow-hidden'>
-                                <div className="text-white font-mono font-semibold">{member.name}</div>
-                                <div className="text-white text-sm">Character: {member.character}</div>
+                                <div className= {`${screenMode==="dark"?" text-white":" text-black"} font-mono font-semibold`}>{member.name}</div>
+                                <div className= {`${screenMode==="dark"?" text-white":" text-black"} text-sm`}>Character: {member.character}</div>
                             </div>
                         </div>
                 ))}
@@ -58,8 +58,8 @@ const MovieCreditDetails = () => {
                             <div  className='h-[150px] w-[150px] rounded-full bg-gray-400'></div>
                         }
                         <div className='flex flex-col justify-center w-36 overflow-hidden'>
-                            <div className="text-white font-mono font-semibold">{member.name}</div>
-                            <div className="text-white text-sm">{member.job}</div>
+                            <div className= {`${screenMode==="dark"?" text-white":" text-black"} font-mono font-semibold`}>{member.name}</div>
+                            <div className= {`${screenMode==="dark"?" text-white":" text-black"} text-sm`}>{member.job}</div>
                         </div>
                     </div>
                 ))}
