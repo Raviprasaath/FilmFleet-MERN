@@ -17,6 +17,7 @@ const SearchPage = () => {
     const [page, setPage] = useState(Number(location.pathname.split('/')[2].charAt(5)));
     const [dataLoad, setDataLoad] = useState([]);
     const [pageDelay, setPageDelay] = useState(true);
+    const [loadDelay, setLoadDelay] = useState(false);
 
     const fetchingInitiator = location.pathname.split('/');
     useScrollTop();
@@ -43,16 +44,23 @@ const SearchPage = () => {
         setPageDelay(true);
         const timer = setTimeout(()=> {
             setPageDelay(false);
+            setLoadDelay(true);
         }, 1000)
         return (()=>timer);
     }, [searchResult, location.pathname])
 
     if (searchResult.length === 0) {
         return (
-            <div className='flex justify-center items-center'>
-                <h1 className='absolute top-28 text-[2vw] text-gray-500 font-extrabold'>Search Again</h1>
-                <img src={wentWrong} alt='gif-img' className='w-[60vw]' />
-            </div>
+            <>
+                <div className='flex h-[70dvh] justify-center items-center'>
+                    {loadDelay &&
+                        <>
+                            <h1 className='absolute top-[120px] text-[2vw] text-gray-500 font-extrabold'>Search Again</h1>
+                            <img src={wentWrong} alt='gif-img' className='sm:h-[40dvh] md:h-[70vh]' />
+                        </>
+                    }
+                </div>
+            </>
         )
     }
 
