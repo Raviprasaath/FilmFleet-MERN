@@ -19,26 +19,28 @@ const Homepage = () => {
     const LazyCarousel = React.lazy(()=>import("../Carousel/Carousel"));
     const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];   
     useScrollTop();
+
+
     useEffect(()=> {
-        dispatch(getNowPlaying({ type: 'now_playing', page: 1 }));
-        dispatch(getTopRated({ type: 'top_rated', page: 1 }));
-        dispatch(getPopular({ type: 'popular', page: 1 }));
-        dispatch(getUpcoming({ type: 'upcoming', page: 1 }));
-        dispatch(getActionMovie({type: '28', page: 1}));
-        dispatch(getAdventureMovie({type: '12', page: 1}));
-        dispatch(getAnimationMovie({type: '16', page: 1}));
-        dispatch(getComedyMovie({type: '35', page: 1}));
-        dispatch(getCrimeMovie({type: '80', page: 1}));
-        dispatch(getDocumentaryMovie({type: '99', page: 1}));
-        dispatch(getDramaMovie({type: '18', page: 1}));
-        dispatch(getFamilyMovie({type: '10751', page: 1}));
-        dispatch(getFantasyMovie({type: '14', page: 1}));
-        dispatch(getHistoryMovie({type: '36', page: 1}));
-        dispatch(getHorrorMovie({type: '27', page: 1}));
-        dispatch(getMusicMovie({type: '10402', page: 1}));
-        dispatch(getMysteryMovie({type: '9648', page: 1}));
-        dispatch(getRomanceMovie({type: '10749', page: 1}));
-        dispatch(getThrillerMovie({type: '53', page: 1}));
+        nowPlayingMovieList.length === 0 && dispatch(getNowPlaying({ type: 'now_playing', page: 1 }));
+        topRatedMovieList.length === 0 && dispatch(getTopRated({ type: 'top_rated', page: 1 }));
+        popularMovieList.length === 0 && dispatch(getPopular({ type: 'popular', page: 1 }));
+        upcomingMovieList.length === 0 && dispatch(getUpcoming({ type: 'upcoming', page: 1 }));
+        actionMovie.length === 0 && dispatch(getActionMovie({type: '28', page: 1}));
+        adventureMovie.length === 0 && dispatch(getAdventureMovie({type: '12', page: 1}));
+        animationMovie.length === 0 && dispatch(getAnimationMovie({type: '16', page: 1}));
+        comedyMovie.length === 0 && dispatch(getComedyMovie({type: '35', page: 1}));
+        crimeMovie.length === 0 && dispatch(getCrimeMovie({type: '80', page: 1}));
+        DocumentaryMovie.length === 0 && dispatch(getDocumentaryMovie({type: '99', page: 1}));
+        DramaMovie.length === 0 && dispatch(getDramaMovie({type: '18', page: 1}));
+        FamilyMovie.length === 0 && dispatch(getFamilyMovie({type: '10751', page: 1}));
+        FantasyMovie.length === 0 && dispatch(getFantasyMovie({type: '14', page: 1}));
+        HistoryMovie.length === 0 && dispatch(getHistoryMovie({type: '36', page: 1}));
+        HorrorMovie.length === 0 && dispatch(getHorrorMovie({type: '27', page: 1}));
+        MusicMovie.length === 0 && dispatch(getMusicMovie({type: '10402', page: 1}));
+        MysteryMovie.length === 0 && dispatch(getMysteryMovie({type: '9648', page: 1}));
+        RomanceMovie.length === 0 && dispatch(getRomanceMovie({type: '10749', page: 1}));
+        ThrillerMovie.length === 0 && dispatch(getThrillerMovie({type: '53', page: 1}));
 
         if (userLocalCheck.email) {
             setLoginCheck(true);

@@ -47,7 +47,7 @@ const SearchPage = () => {
             setLoadDelay(true);
         }, 1000)
         return (()=>timer);
-    }, [searchResult, location.pathname])
+    }, [location.pathname])
 
     if (searchResult.length === 0) {
         return (
