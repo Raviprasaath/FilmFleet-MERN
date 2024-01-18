@@ -9,31 +9,23 @@ const HomeHeaderVideo = () => {
     const [trailerKey, setTrailerKey] = useState('1DJYiG6wh0w');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [indexNumber, setIndexNumber] = useState();
-    const [randomMovie, setRandomMovie] = useState();
 
     const screen = useScreenSize();
-
+    
     const [renderDelay, setRenderDelay] = useState(false);
     const dispatch = useDispatch();
-
-    const array = [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie];
-
     
-    useEffect(()=> {
-        setIndexNumber(Math.floor(Math.random()*array.length));
-        setRandomMovie(Math.floor(20 % Math.random()*20+1));
-    }, [])
+    const array = [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie];
+    let indexNumber = Math.floor(Math.random()*array.length);
+    let randomMovie = Math.floor(20 % Math.random()*20+1);
 
     useEffect(()=> {
         const time = setTimeout(()=> {
             dispatch(getTrailerOut( {id: array[indexNumber]?.results[randomMovie]?.id} ));
 
-
-            
             setTitle(array[indexNumber]?.results[randomMovie]?.title || array[indexNumber]?.results[randomMovie]?.original_title)
             setDescription(array[indexNumber]?.results[randomMovie]?.overview);
-        }, 0)
+        }, 10)
 
         return (()=> clearTimeout(time));
     }, [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie])
