@@ -16,8 +16,9 @@ const HomeHeaderVideo = () => {
     const dispatch = useDispatch();
     
     const array = [adventureMovie, animationMovie, FantasyMovie, HistoryMovie, MusicMovie, RomanceMovie];
-    let indexNumber = Math.floor(Math.random()*array.length);
-    let randomMovie = Math.floor(20 % Math.random()*20+1);
+
+    let indexNumber = Math.floor(Math.random()*(array.length - 1));
+    let randomMovie = Math.floor(20 % Math.random()*20);
 
     useEffect(()=> {
         const time = setTimeout(()=> {

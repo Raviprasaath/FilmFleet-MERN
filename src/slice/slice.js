@@ -153,44 +153,6 @@ export const getTrailerOut = createAsyncThunk(
 )
 
 
-// export const getSignup = createAsyncThunk(
-//     'userDetail/getSignup',
-//     async ({ username, password, email, signing }, { rejectWithValue }) => {
-//         let url;
-//         let body;
-        
-//         if (signing === 'login') {
-//             url = `${SERVER_BASE_URL}auth/login`;
-//             body = {
-//                 email,
-//                 password,
-//             };
-//         } else if (signing === 'register') {
-//           url = `${SERVER_BASE_URL}auth/register`;
-//           body = {
-//             username,
-//             email,
-//             password,
-//           };
-//         }
-        
-//         const options = {
-//             method: 'POST',
-//             body: JSON.stringify(body),
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 accept: 'application/json',
-//             },
-//         };
-        
-//     try {
-//         const response = await axios(url, options);
-//         return response.data;
-//       } catch (error) {
-//         return rejectWithValue({ error: "Signing Fails" });
-//       }
-//     }
-// );
 export const getSignup = createAsyncThunk(
     'userDetail/getSignup',
     async ({username, password, email, signing}, {rejectWithValue}) => {
@@ -244,7 +206,7 @@ export const getSignup = createAsyncThunk(
 
 export const gettingWatchList =createAsyncThunk(
     'watchListGetting/gettingWatchList',
-    async ({tokenValue, methods, suffix, movie }, {rejectWithValue}) => {
+    async ({tokenValue, methods, suffix, movie, emailString }, {rejectWithValue}) => {
 
         let myHeaders = new Headers();
         myHeaders.append("projectID", "vflsmb93q9oc");
@@ -253,28 +215,28 @@ export const gettingWatchList =createAsyncThunk(
         myHeaders.append('accept', 'application/json');
 
         let requestOptions;
-        if (methods === "POST" || methods === "DELETE") {
+        if (methods === "POST" || methods === "DELETE" || methods === "PATCH") {
             let raw = JSON.stringify({
-                detail: movie,
-              })
-              requestOptions = {
-                  method: methods,
-                  headers: myHeaders,
-                  body: raw,
-                  redirect: 'follow'
-                };
-            } else if (methods === "GET") {
+                emailString,
+                details: movie,
+            })
             requestOptions = {
                 method: methods,
                 headers: myHeaders,
+                body: raw,
                 redirect: 'follow'
+            };
+        } else if (methods === "GET") {
+            requestOptions = {
+                method: methods,
+                headers: myHeaders,
+                redirect: 'follow',
             };
         }
         let url = SERVER_BASE_URL + suffix
-        
-
         try {
             const response = await fetch(url, requestOptions);
+        
             if (response.ok) {
                 const result = await response.json();
                 return result

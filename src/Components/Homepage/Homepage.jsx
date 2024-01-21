@@ -11,15 +11,15 @@ const Homepage = () => {
     const { screenMode, popularMovieList, nowPlayingMovieList, topRatedMovieList, 
         upcomingMovieList, actionMovie, adventureMovie, animationMovie, comedyMovie,
         crimeMovie, DocumentaryMovie, DramaMovie, FamilyMovie, FantasyMovie, HistoryMovie,
-        HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie,
+        HorrorMovie, MusicMovie, MysteryMovie, RomanceMovie, ThrillerMovie, watchList
     } = useSelector((state) => state.movieReducer);
     const dispatch = useDispatch();
     const [loginCheck, setLoginCheck] = useState(false);
 
     const LazyCarousel = React.lazy(()=>import("../Carousel/Carousel"));
     const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];   
+    
     useScrollTop();
-
 
     useEffect(()=> {
         nowPlayingMovieList.length === 0 && dispatch(getNowPlaying({ type: 'now_playing', page: 1 }));
@@ -44,23 +44,11 @@ const Homepage = () => {
 
         if (userLocalCheck.email) {
             setLoginCheck(true);
-            const result = dispatch(gettingWatchList({
-                tokenValue: userLocalCheck.accessToken,
-                methods: "GET",
-                suffix: "watch-later/",
-                movie: "",
-            }))
-            result.then((res=>{
-                const response = res.payload;
-                const tempArr = response.map((item)=>item.detail);
-                localStorage.setItem('watchList', JSON.stringify(tempArr));
-            }))
+            
         }
-
         
-
     }, [loginCheck, location.pathname])
-
+    
     return (
         <>
             <div className={`scroll-smooth w-full px-4 lg:px-4 m-auto ${screenMode==="dark"?"bg-slate-800 text-white":"bg-white text-black"}`}>                

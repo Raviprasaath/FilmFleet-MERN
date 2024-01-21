@@ -11,7 +11,7 @@ import MovieCreditDetails from '../MovieCreditDetails/MovieCreditDetails';
 import { IMG_URL } from '../../utils/constants';
 
 const MovieDetailPage = () => {
-  const { singleMovieFetch, screenMode, trailerLink, isLoading, relatedMovie } = useSelector((state) => state.movieReducer);
+  const { singleMovieFetch, screenMode, trailerLink, isLoading, relatedMovie, watchList } = useSelector((state) => state.movieReducer);
   
   const [showTrailerModal, setShowTrailerModal] = useState(false);
   const [trailerPath, setTrailerPath] = useState("");
@@ -23,12 +23,15 @@ const MovieDetailPage = () => {
   const [watchListStatus, setWatchListStatus] = useState(false);
   const [backupData, setBackupData] = useState([]);
   const dispatch = useDispatch();
+  const [idVal, setIdVal] = useState();
 
   let movieValue = JSON.parse(localStorage.getItem('singleMovieResult'));
 
-  const localStore = JSON.parse(localStorage.getItem('watchList')) || [];
+
+
   const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];
   useScrollTop();
+
   const handleWatchTrailer = (id) => {
     dispatch(getTrailerOut({id: id}))
     setCount((prev)=>prev+1);
@@ -49,62 +52,43 @@ const MovieDetailPage = () => {
     setShowTrailerModal(false);
   }
 
-  const handlerAddToWatchList = (movie) => {
-    if (loginCheck) {
-      let idCheck = false;
-      idCheck = localStore.length !== 0 && localStore.some((item)=>item.id === movie.id)
 
-      if (!idCheck) {
-        localStore.push(movie);
-        localStorage.setItem('watchList', JSON.stringify(localStore));
-        setWatchListStatus(true);
+  const handlerWatchList = (movie, idVal, watchList, tokenValue) => {
+    let checkAlreadyAvailable;
+    let isAlreadyAvailable;
+    let id;
+    if (watchList.length !== 0) {
+      checkAlreadyAvailable = watchList?.some((item)=>item?.details[0]?.id === movie?.id);
+      isAlreadyAvailable = watchList?.filter((item)=>item?.details[0]?.id === movie?.id);
+      id = (isAlreadyAvailable[0]?._id);
+    }
 
-        dispatch(gettingWatchList({
-          tokenValue: tokenValue,
-          methods: "POST",
-          suffix: `watch-later/${movie.id}/`,
-          movie: movie,
-        }))
-
-      } else {
-        const filterValue = localStore.filter((item)=>item.id !== movie.id);
-        localStorage.setItem('watchList', JSON.stringify(filterValue));
-
-        setWatchListStatus(false);
-
-        let idVal = "";
-        const result = dispatch(gettingWatchList({
-          tokenValue: userLocalCheck.accessToken,
-          methods: "GET",
-          suffix: "watch-later/",
-          movie: movie,
-        }))
-        result.then((res=>{
-          const response = res.payload;
-          const ans = response.filter((item)=>{
-            return (item.detail.id === movie.id);
-          });
-          if (ans.length !== 0) {
-            idVal = ans[0]._id;
-          }
-          dispatch(gettingWatchList({
-            tokenValue: userLocalCheck.accessToken,
-            methods: "DELETE",
-            suffix: `watch-later/${idVal}`,
-            movie: "",
-          }))
-        }))
-
-
-      }
+    if (!checkAlreadyAvailable || watchList.length === 0) {
+      dispatch(gettingWatchList({
+        tokenValue: tokenValue,
+        methods: "POST",
+        suffix: `watch-later/${movie.id}/?userId=${userLocalCheck.userId}`,
+        emailString: userLocalCheck?.email,
+        movie: movie
+      }))
+      setWatchListStatus(true);
     } else {
-      setSnakeBar(true);
+      dispatch(gettingWatchList({
+        tokenValue: tokenValue,
+        methods: "DELETE",
+        suffix: `watch-later/${id}/?userId=${userLocalCheck.userId}`,
+        emailString: userLocalCheck?.email,
+      }))
+      setWatchListStatus(false);
     }
   }
+
+
   
   const handlerSnakeBarClose = () => {
     setSnakeBar(false);
   }
+  
 
   useEffect(()=> {
     const keys = trailerLink?.results?.filter((item)=>item.name.includes("Trailer")||item.name.includes("Teaser")) || ''
@@ -115,9 +99,15 @@ const MovieDetailPage = () => {
     }
     if (userLocalCheck.email) {
       setLoginCheck(true);
-      setTokenValue(userLocalCheck.accessToken)
+      setTokenValue(userLocalCheck.accessToken);
     }
-  }, [trailerLink, showTrailerModal, singleMovieFetch])
+
+    if (watchList && watchList.length !== 0) {
+      const isMovieAvail = watchList?.some((item)=>item?.details[0]?.id === singleMovieFetch?.id);
+      setWatchListStatus(isMovieAvail);
+    }
+    
+  }, [trailerLink, showTrailerModal, singleMovieFetch, watchList])
 
   useEffect (()=> {
     const time = setTimeout(()=> {
@@ -131,19 +121,6 @@ const MovieDetailPage = () => {
       value: movieValue?.genres[0]?.id,
       page: 1,  
     }))
-
-    if (userLocalCheck.email) {
-      let time = setTimeout(()=> {
-        let idCheck = false;
-        idCheck = localStore.length !== 0 && localStore.some((item)=>item.id === singleMovieFetch.id);
-
-        if (idCheck) {
-          setWatchListStatus(true);
-        }
-      }, 1000)
-      return (()=>clearTimeout(time))
-    }
-
   }, [singleMovieFetch])
 
 
@@ -152,7 +129,17 @@ const MovieDetailPage = () => {
     dispatch(getSingleMovie({ id: idValue }));
     dispatch(gettingTeamDetails({ id: idValue }));
     setBackupData(movieValue);
+
+    if (userLocalCheck?.email) {
+      dispatch(gettingWatchList({
+        tokenValue: userLocalCheck?.accessToken,
+        methods: "GET",
+        suffix: `watch-later/?userId=${userLocalCheck?.userId}`,
+      }))
+    }
+
   }, [])
+
 
 
   return (
@@ -184,7 +171,7 @@ const MovieDetailPage = () => {
                     Watch Trailer
                   </button>
 
-                  <button className="mt-4 bg-green-500 hover:bg-green-700 text-white text-[1rem] px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-green" onClick={() => handlerAddToWatchList(singleMovieFetch)}>
+                  <button className="mt-4 bg-green-500 hover:bg-green-700 text-white text-[1rem] px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-green" onClick={() => handlerWatchList(singleMovieFetch, idVal, watchList, tokenValue)}>
                     {watchListStatus ? "Remove From Watch List":"Add to Watch List"}
       
                   </button>

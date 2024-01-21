@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../Components/Footer/Footer'
 import { useScreenSize } from '../Components/CustomHook/useScreenSize'
 import { Link } from 'react-router-dom';
-import { screenModeToggler, sideBarStore } from '../slice/slice'
+import { screenModeToggler, sideBarStore, gettingWatchList } from '../slice/slice'
 import { CiLight } from "react-icons/ci";
 import { MdWatchLater } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,6 +27,9 @@ const RootLayout = () => {
 
   const [loginCheck, setLoginCheck] = useState(false);
   const [snakeBar, setSnakeBar] = useState(false);
+  const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];
+
+
 
   const handlerSideBar = () => {
     dispatch(sideBarStore(false));
@@ -35,7 +38,7 @@ const RootLayout = () => {
     {screenMode === "light" ? setScreenMode("dark"):setScreenMode("light")}
     dispatch(screenModeToggler(screenMode));
   }
-  const userLocalCheck = JSON.parse(localStorage.getItem('userDetails')) || [];
+
 
   const handlerWatchList = () => {
     if(!loginCheck) {
@@ -64,11 +67,17 @@ const RootLayout = () => {
         setIsWindow(true);
     }
     setScreenMode(screenModeGlobal);
+    
 }, [screenSize, sideBar, screenModeGlobal])
 
+
+
+
 useEffect(()=> {
+  
   if (userLocalCheck.email) {
       setLoginCheck(true);
+
   } else if (location.pathname.includes('watch-later') && !userLocalCheck.email) {
       navigate('/', {replace: true});
   }

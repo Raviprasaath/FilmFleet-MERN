@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { IMG_URL } from '../../utils/constants';
+import user from "../../assets/default-user-icon.webp";
 
 const MovieCreditDetails = () => {
     const { crew, screenMode } = useSelector((state)=>state.movieReducer);
@@ -55,7 +56,7 @@ const MovieCreditDetails = () => {
                                 alt={`${member.name} Image`}
                                 style={{ objectPosition: '50% 0%', height: '150px', width: '150px' }}
                             />:
-                            <div  className='h-[150px] w-[150px] rounded-full bg-gray-400'></div>
+                            <img className='h-[150px] w-[150px] rounded-full' src={user} alt="" />
                         }
                         <div className='flex flex-col justify-center w-36 overflow-hidden'>
                             <div className= {`${screenMode==="dark"?" text-white":" text-black"} font-mono font-semibold`}>{member.name}</div>

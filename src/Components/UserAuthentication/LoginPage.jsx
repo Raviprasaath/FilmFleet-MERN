@@ -53,7 +53,6 @@ const LoginPage = () => {
       setForceLoader(!forceLoader);
     }
   };
-  
   useScrollTop();
   useEffect(()=> {
       if (userAuth.accessToken) {
