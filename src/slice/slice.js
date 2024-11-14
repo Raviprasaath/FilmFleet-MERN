@@ -78,7 +78,7 @@ export const gettingSearchList = createAsyncThunk(
                     Authorization: `Bearer ${TMDB_API_TOKEN}`
                 }
             }
-            const url = `https://api.themoviedb.org/3/search/movie?query=${queryValue}&include_adult=false&language=en-US&page=${page}`
+            const url = `https://api.themoviedb.org/3/search/movie?query=${queryValue}&include_adult=true&language=en-US&page=${page}`
             const response = await axios(url, option);
             return response.data;            
         }
